@@ -83,14 +83,13 @@ cifar10_ood_entropy_aurocs = []
 # cifar10_ood_confidence_aurocs = []
 
 with torch.no_grad():
-    for i, model in enumerate(ensemble):
-        print (f'Model {i}')
-        (_, _, _), (_, _, _), svhn_entropy_auroc, _ = get_roc_auc_ensemble(ensemble,
-                                                                  cifar10_test_loader,
-                                                                  svhn_test_loader,
-                                                                  uncertainty='predictive_entropy',
-                                                                  device="cuda"
-                                                      )
+    #print (f'Model {i}')
+    (_, _, _), (_, _, _), svhn_entropy_auroc, _ = get_roc_auc_ensemble(ensemble,
+                                                              cifar10_test_loader,
+                                                              svhn_test_loader,
+                                                              uncertainty='predictive_entropy',
+                                                              device="cuda"
+                                                  )
 #         (_, _, _), (_, _, _), svhn_confidence_auroc, _ = get_roc_auc(model,
 #                                                                   cifar10_test_loader,
 #                                                                   svhn_test_loader,
@@ -98,13 +97,13 @@ with torch.no_grad():
 #                                                                   device="cuda",
 #                                                                   confidence=True
 #                                                       )
-        print ('SVHN done')
-        (_, _, _), (_, _, _), cifar100_entropy_auroc, _ = get_roc_auc_ensemble(ensemble,
-                                                                  cifar10_test_loader,
-                                                                  cifar100_test_loader,
-                                                                  uncertainty='predictive_entropy',
-                                                                  device="cuda"
-                                                      )
+    print ('SVHN done')
+    (_, _, _), (_, _, _), cifar100_entropy_auroc, _ = get_roc_auc_ensemble(ensemble,
+                                                              cifar10_test_loader,
+                                                              cifar100_test_loader,
+                                                              uncertainty='predictive_entropy',
+                                                              device="cuda"
+                                                  )
 #         (_, _, _), (_, _, _), cifar100_confidence_auroc, _ = get_roc_auc(model,
 #                                                                   cifar10_test_loader,
 #                                                                   cifar100_test_loader,
@@ -112,12 +111,12 @@ with torch.no_grad():
 #                                                                   device="cuda",
 #                                                                   confidence=True
 #                                                       )
-        print ('CIFAR100 done')
-        (_, _, _), (_, _, _), cifar10_ood_entropy_auroc, _ = get_roc_auc_ensemble(ensemble,
-                                                                  cifar10_test_loader,
-                                                                  cifar10_ood_loader,
-                                                                  uncertainty='predictive_entropy',
-                                                                  device="cuda"
+    print ('CIFAR100 done')
+    (_, _, _), (_, _, _), cifar10_ood_entropy_auroc, _ = get_roc_auc_ensemble(ensemble,
+                                                              cifar10_test_loader,
+                                                              cifar10_ood_loader,
+                                                              uncertainty='predictive_entropy',
+                                                              device="cuda"
                                                       )
 #         (_, _, _), (_, _, _), cifar10_ood_confidence_auroc, _ = get_roc_auc(model,
 #                                                                   cifar10_test_loader,
@@ -126,45 +125,27 @@ with torch.no_grad():
 #                                                                   device="cuda",
 #                                                                   confidence=True
 #                                                       )
-        print ('Morphed CIFAR-10 done')
-
-        svhn_entropy_aurocs.append(svhn_entropy_auroc)
-        #svhn_confidence_aurocs.append(svhn_confidence_auroc)
- 
-        cifar100_entropy_aurocs.append(cifar100_entropy_auroc)
-        #cifar100_confidence_aurocs.append(cifar100_confidence_auroc)
-
-        cifar10_ood_entropy_aurocs.append(cifar10_ood_entropy_auroc)
-        #cifar10_ood_confidence_aurocs.append(cifar10_ood_confidence_auroc)
+    print ('Morphed CIFAR-10 done')
 
 
 
-svhn_entropy_aurocs = torch.tensor(svhn_entropy_aurocs)
-#svhn_confidence_aurocs = torch.tensor(svhn_confidence_aurocs)
+# svhn_entropy_aurocs = torch.tensor(svhn_entropy_aurocs)
+# #svhn_confidence_aurocs = torch.tensor(svhn_confidence_aurocs)
 
-cifar100_entropy_aurocs = torch.tensor(cifar100_entropy_aurocs)
-#cifar100_confidence_aurocs = torch.tensor(cifar100_confidence_aurocs)
+# cifar100_entropy_aurocs = torch.tensor(cifar100_entropy_aurocs)
+# #cifar100_confidence_aurocs = torch.tensor(cifar100_confidence_aurocs)
 
-cifar10_ood_entropy_aurocs = torch.tensor(cifar10_ood_entropy_aurocs)
-#cifar10_ood_confidence_aurocs = torch.tensor(cifar10_ood_confidence_aurocs)
+# cifar10_ood_entropy_aurocs = torch.tensor(cifar10_ood_entropy_aurocs)
+# #cifar10_ood_confidence_aurocs = torch.tensor(cifar10_ood_confidence_aurocs)
 
 
 
 import json
 
 res_dict = {
-	'svhn': {
-	    'mean': torch.mean(svhn_entropy_aurocs).item(),
-	    'std': torch.std(svhn_entropy_aurocs).item()
-	},
-	'cifar100': {
-	    'mean': torch.mean(cifar100_entropy_aurocs).item(),
-	    'std': torch.std(cifar100_entropy_aurocs).item()
-	},
-	'morphed_cifar10': {
-	    'mean': torch.mean(cifar10_ood_entropy_aurocs).item(),
-	    'std': torch.std(cifar10_ood_entropy_aurocs).item()
-	}
+	'svhn': svhn_entropy_auroc.item(),
+	'cifar100': cifar100_entropy_auroc.item(),
+	'morphed_cifar10': cifar10_ood_entropy_auroc.item()
 }
 
 
